@@ -1,15 +1,16 @@
-*.md text         eol=lf
-*.json text       eol=lf
-*.xml text        eol=lf
-*.xml.dist text   eol=lf
-LICENSE text      eol=lf
-*.php text        eol=lf
-/Dockerfile       export-ignore
-/Makefile         export-ignore
-/.github          export-ignore
-/tests            export-ignore
-/.gitattributes   export-ignore
-/.gitignore       export-ignore
-/*.dist           export-ignore
-/README.md        export-ignore
-/captainhook.json export-ignore
+*.md text            eol=lf
+*.json text          eol=lf
+*.xml text           eol=lf
+*.xml.dist text      eol=lf
+LICENSE text         eol=lf
+*.php text           eol=lf
+/Dockerfile          export-ignore
+/Makefile            export-ignore
+/.github             export-ignore
+/tests               export-ignore
+/.gitattributes      export-ignore
+/.gitignore          export-ignore
+/*.dist              export-ignore
+/README.md           export-ignore
+/captainhook.json    export-ignore
+/install-composer.sh export-ignore
