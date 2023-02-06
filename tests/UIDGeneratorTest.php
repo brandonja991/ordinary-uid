@@ -59,4 +59,31 @@ class UIDGeneratorTest extends TestCase
         self::assertSame($customValue, $uid->custom());
         self::assertSame($expectedDate->format($dateFormat), $uid->dateTime()->format($dateFormat));
     }
+
+    public function testGenerateTooManyBytes(): void
+    {
+        self::expectException(UnexpectedValueException::class);
+        $dateTime = new DateTimeImmutable('2005-04-13T07:35:42.234567');
+        $generator = $this->createNullGeneratorWithFrozenClock($dateTime);
+        /** @psalm-suppress InvalidArgument */
+        $generator->generate(16);
+    }
+
+    public function testGenerateZeroBytes(): void
+    {
+        self::expectException(UnexpectedValueException::class);
+        $dateTime = new DateTimeImmutable('2005-04-13T07:35:42.234567');
+        $generator = $this->createNullGeneratorWithFrozenClock($dateTime);
+        /** @psalm-suppress InvalidArgument */
+        $generator->generate(0);
+    }
+
+    public function testGenerateNegativeBytes(): void
+    {
+        self::expectException(UnexpectedValueException::class);
+        $dateTime = new DateTimeImmutable('2005-04-13T07:35:42.234567');
+        $generator = $this->createNullGeneratorWithFrozenClock($dateTime);
+        /** @psalm-suppress InvalidArgument */
+        $generator->generate(-1);
+    }
 }
