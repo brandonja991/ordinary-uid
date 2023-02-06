@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Ordinary\UID;
 
-use UnexpectedValueException;
-
 enum TimePrecision: string
 {
     case Microsecond = 'microsecond';
