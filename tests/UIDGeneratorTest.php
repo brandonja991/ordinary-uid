@@ -24,7 +24,7 @@ class UIDGeneratorTest extends TestCase
             }
         };
 
-        $generator = new UIDGenerator($frozenClock, new Randomizer($nullRandomizerEngine));
+        $generator = new Generator($frozenClock, new Randomizer($nullRandomizerEngine));
 
         $uid = $generator->generate(1);
         $dateFormat = 'Y-m-d\TH:i:s.v';

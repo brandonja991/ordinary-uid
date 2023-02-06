@@ -10,7 +10,7 @@ use Random\Randomizer;
 /**
  * Service used for generating new UIDs.
  */
-class UIDGenerator
+class Generator
 {
     public function __construct(
         protected readonly ClockInterface $clock,
