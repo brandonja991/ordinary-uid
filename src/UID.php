@@ -53,10 +53,10 @@ REGEXP;
     }
 
     public function __construct(
-        public readonly int $timeSeconds,
-        public readonly int $timeFraction,
-        public readonly TimePrecision $timePrecision,
-        public readonly string $uncommon,
+        private readonly int $timeSeconds,
+        private readonly int $timeFraction,
+        private readonly TimePrecision $timePrecision,
+        private readonly string $uncommon,
     ) {
     }
 
