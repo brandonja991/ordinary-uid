@@ -18,5 +18,5 @@ interface UIDInterface
 
     public function timePrecision(): TimePrecision;
 
-    public function uncommon(): string;
+    public function custom(): string;
 }

@@ -18,14 +18,14 @@ class Generator
     ) {
     }
 
-    /** @param int<1,15> $uncommonBytes */
-    public function generate(int $uncommonBytes = 6): UID
+    /** @param int<1,15> $customBytes */
+    public function generate(int $customBytes = 6): UID
     {
         assert(
-            $uncommonBytes > 0 && $uncommonBytes < 16,
-            new UnexpectedValueException('Can not generate UID with ' . $uncommonBytes . ' bytes'),
+            $customBytes > 0 && $customBytes < 16,
+            new UnexpectedValueException('Can not generate UID with ' . $customBytes . ' bytes'),
         );
 
-        return UID::fromDateAndUncommon($this->clock->now(), $this->randomizer->getBytes($uncommonBytes));
+        return UID::fromDateAndCustom($this->clock->now(), $this->randomizer->getBytes($customBytes));
     }
 }

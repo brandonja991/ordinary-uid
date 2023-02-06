@@ -12,7 +12,7 @@ use const STR_PAD_LEFT;
 class UID implements UIDInterface
 {
     public const PART_REGEX = <<<'REGEXP'
-/^(?<secs>[[:xdigit:]]{8})-(?<prec>[[:xdigit:]])(?<frac>[[:xdigit:]]+)-(?<ubytes>[[:xdigit:]])(?<uncomm>[[:xdigit:]]+)$/
+/^(?<secs>[[:xdigit:]]{8})-(?<prec>[[:xdigit:]])(?<frac>[[:xdigit:]]+)-(?<cbytes>[[:xdigit:]])(?<custom>[[:xdigit:]]+)$/
 REGEXP;
 
     public static function parse(string $uid): self
@@ -30,25 +30,25 @@ REGEXP;
         );
 
         assert(
-            hexdec($matches['ubytes']) * 2 === strlen($matches['uncomm']),
-            new UnexpectedValueException('Invalid uncommon in UID - length mismatch'),
+            hexdec($matches['cbytes']) * 2 === strlen($matches['custom']),
+            new UnexpectedValueException('Invalid custom part in UID - length mismatch'),
         );
 
         return new self(
             hexdec($matches['secs']),
             hexdec($matches['frac']),
             $precision,
-            hex2bin($matches['uncomm']),
+            hex2bin($matches['custom']),
         );
     }
 
-    public static function fromDateAndUncommon(DateTimeInterface $dateTime, string $uncommon): self
+    public static function fromDateAndCustom(DateTimeInterface $dateTime, string $custom): self
     {
         return new self(
             $dateTime->getTimestamp(),
             (int) $dateTime->format('u'),
             TimePrecision::Microsecond,
-            $uncommon,
+            $custom,
         );
     }
 
@@ -56,7 +56,7 @@ REGEXP;
         private readonly int $timeSeconds,
         private readonly int $timeFraction,
         private readonly TimePrecision $timePrecision,
-        private readonly string $uncommon,
+        private readonly string $custom,
     ) {
     }
 
@@ -86,7 +86,7 @@ REGEXP;
                 '0',
                 STR_PAD_LEFT,
             ),
-            dechex(strlen($this->uncommon())) . bin2hex($this->uncommon()),
+            dechex(strlen($this->custom())) . bin2hex($this->custom()),
         ]);
     }
 
@@ -119,8 +119,8 @@ REGEXP;
         return $this->timePrecision;
     }
 
-    public function uncommon(): string
+    public function custom(): string
     {
-        return $this->uncommon;
+        return $this->custom;
     }
 }

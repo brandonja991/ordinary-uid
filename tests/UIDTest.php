@@ -51,11 +51,11 @@ class UIDTest extends TestCase
         self::assertSame($uid, $object->value());
     }
 
-    public function testFromDateAndUncommon(): void
+    public function testFromDateAndCustom(): void
     {
         $date = new DateTimeImmutable('2005-04-13T17:18:19.456789');
 
-        $object = UID::fromDateAndUncommon($date, '!@#$%^');
+        $object = UID::fromDateAndCustom($date, '!@#$%^');
 
         $format = 'Y-m-d\TH:i:s.v';
 
