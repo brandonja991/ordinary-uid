@@ -1,0 +1,10 @@
+.phplint-cache
+.phpunit.result.cache
+.phpunit.cache
+.psalm-cache
+phpunit.xml
+psalm.xml
+phpcs.xml
+composer.lock
+.idea
+/vendor
