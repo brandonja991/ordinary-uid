@@ -19,7 +19,7 @@ class Generator
     }
 
     /** @param int<1,15> $customBytes */
-    public function generate(int $customBytes = 6): UID
+    public function generate(int $customBytes): UID
     {
         assert(
             $customBytes > 0 && $customBytes < 16,
