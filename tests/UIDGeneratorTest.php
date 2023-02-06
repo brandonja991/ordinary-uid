@@ -28,7 +28,7 @@ class UIDGeneratorTest extends TestCase
         return new Generator($frozenClock, new Randomizer($nullRandomizerEngine));
     }
 
-    public function customByteCountProvider(): PHPGenerator
+    public function generatorWithCustomByteCountProvider(): PHPGenerator
     {
         $dateTime = new DateTimeImmutable('2005-04-13T07:35:42.234567');
         $generator = $this->createNullGeneratorWithFrozenClock($dateTime);
@@ -43,7 +43,7 @@ class UIDGeneratorTest extends TestCase
 
     /**
      * @param int<1,15> $customByteLength
-     * @dataProvider customByteCountProvider
+     * @dataProvider generatorWithCustomByteCountProvider
      */
     public function testGenerate(
         Generator $generator,
@@ -87,7 +87,7 @@ class UIDGeneratorTest extends TestCase
         $generator->generate(-1);
     }
 
-    public function customValueProvider(): PHPGenerator
+    public function generatorWithCustomBytesProvider(): PHPGenerator
     {
         $dateTime = new DateTimeImmutable('2005-04-13T07:35:42.234567');
         $generator = $this->createNullGeneratorWithFrozenClock($dateTime);
@@ -105,7 +105,7 @@ class UIDGeneratorTest extends TestCase
         yield [$generator, "!@#$", $datePrefix . '421402324', $dateTime];
     }
 
-    /** @dataProvider customValueProvider */
+    /** @dataProvider generatorWithCustomBytesProvider */
     public function testGenerateCustom(
         Generator $generator,
         string $customValue,
