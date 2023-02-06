@@ -2,6 +2,7 @@
   "name": "ordinary/uid",
   "description": "Library for using and generating universally unique ids.",
   "type": "library",
+  "license": "MIT",
   "authors": [
     {
       "name": "Brandon Jackson",
