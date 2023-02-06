@@ -86,4 +86,37 @@ class UIDGeneratorTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         $generator->generate(-1);
     }
+
+    public function customValueProvider(): PHPGenerator
+    {
+        $dateTime = new DateTimeImmutable('2005-04-13T07:35:42.234567');
+        $generator = $this->createNullGeneratorWithFrozenClock($dateTime);
+        $datePrefix = '425ccbce-639447-';
+
+        for ($i = 1; $i < 16; $i++) {
+            yield [
+                $generator,
+                $nullBytes = str_repeat("\0", $i),
+                $datePrefix . dechex($i) . bin2hex($nullBytes),
+                $dateTime,
+            ];
+        }
+
+        yield [$generator, "!@#$", $datePrefix . '421402324', $dateTime];
+    }
+
+    /** @dataProvider customValueProvider */
+    public function testGenerateCustom(
+        Generator $generator,
+        string $customValue,
+        string $expectedUID,
+        DateTimeInterface $expectedDate,
+    ): void {
+        $uid = $generator->generateCustom($customValue);
+        $dateFormat = 'Y-m-d\TH:i:s.v';
+
+        self::assertSame($expectedUID, $uid->value());
+        self::assertSame($customValue, $uid->custom());
+        self::assertSame($expectedDate->format($dateFormat), $uid->dateTime()->format($dateFormat));
+    }
 }
