@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Ordinary\UID;
 
 use DateTimeImmutable;
+use DateTimeInterface;
+use Generator as PHPGenerator;
 use Ordinary\Clock\FrozenClock;
 use PHPUnit\Framework\TestCase;
 use Random\Engine;
@@ -12,9 +14,8 @@ use Random\Randomizer;
 
 class UIDGeneratorTest extends TestCase
 {
-    public function testGenerate(): void
+    public function createNullGeneratorWithFrozenClock(DateTimeInterface $dateTime): Generator
     {
-        $dateTime = new DateTimeImmutable('2005-04-13T07:35:42.234567');
         $frozenClock = new FrozenClock($dateTime);
 
         $nullRandomizerEngine = new class () implements Engine {
@@ -24,12 +25,38 @@ class UIDGeneratorTest extends TestCase
             }
         };
 
-        $generator = new Generator($frozenClock, new Randomizer($nullRandomizerEngine));
+        return new Generator($frozenClock, new Randomizer($nullRandomizerEngine));
+    }
 
-        $uid = $generator->generate(1);
+    public function customByteCountProvider(): PHPGenerator
+    {
+        $dateTime = new DateTimeImmutable('2005-04-13T07:35:42.234567');
+        $generator = $this->createNullGeneratorWithFrozenClock($dateTime);
+
+        for ($i = 1; $i < 16; $i++) {
+            $nullBytes = str_repeat("\0", $i);
+            $expected = '425ccbce-639447-' . dechex($i) . bin2hex($nullBytes);
+
+            yield [$generator, $i, $nullBytes, $expected, $dateTime];
+        }
+    }
+
+    /**
+     * @param int<1,15> $customByteLength
+     * @dataProvider customByteCountProvider
+     */
+    public function testGenerate(
+        Generator $generator,
+        int $customByteLength,
+        string $customValue,
+        string $expectedUID,
+        DateTimeInterface $expectedDate,
+    ): void {
+        $uid = $generator->generate($customByteLength);
         $dateFormat = 'Y-m-d\TH:i:s.v';
 
-        self::assertSame('425ccbce-639447-100', $uid->value());
-        self::assertSame($dateTime->format($dateFormat), $uid->dateTime()->format($dateFormat));
+        self::assertSame($expectedUID, $uid->value());
+        self::assertSame($customValue, $uid->custom());
+        self::assertSame($expectedDate->format($dateFormat), $uid->dateTime()->format($dateFormat));
     }
 }
