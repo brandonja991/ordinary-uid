@@ -1,0 +1,51 @@
+name: Ordinary PHP Composer Library Test
+
+on:
+  pull_request:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+      - name: Report PHP and Composer version
+        run: php -v && composer --version
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: PHP Linting
+        run: composer run-script phplint
+
+      - name: PHP CodeSniffer
+        run: composer run-script phpcs
+
+      - name: PHP Psalm
+        run: composer run-script psalm
+
+      - name: PHP Unit Tests
+        run: composer run-script phpunit
