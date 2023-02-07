@@ -51,6 +51,6 @@
     "phplint": "vendor/bin/phplint",
     "phpcs": "vendor/bin/phpcs",
     "psalm": "vendor/bin/psalm --no-cache --show-info=true",
-    "phpunit": "vendor/bin/phpunit --testsuite=unit"
+    "phpunit": "vendor/bin/phpunit --testsuite=unit --testdox"
   }
 }
