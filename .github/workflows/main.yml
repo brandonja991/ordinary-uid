@@ -31,7 +31,7 @@ jobs:
 
       - name: Fetch Dependencies
         if: steps.cache-composer-deps.outputs.cache-hit != 'true'
-        run: make dependencies
+        run: make deps
 
       - name: PHP Linting
         run: make phplint
