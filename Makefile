@@ -1,7 +1,10 @@
 .PHONY: *
 
-php-container:
-	docker build --force-rm --no-cache --tag ordinary-uid-php .
+php-image:
+	docker build --tag ordinary-uid-php .
+
+dependencies:
+	docker run -it --rm -v .:/opt/project -w /opt/project ordinary-uid-php composer install --no-progress
 
 phplint:
 	docker run -it --rm -v .:/opt/project -w /opt/project ordinary-uid-php composer run-script phplint
@@ -15,4 +18,5 @@ psalm:
 phpunit:
 	docker run -it --rm -v .:/opt/project -w /opt/project ordinary-uid-php composer run-script phpunit
 
-test: phplint phpcs psalm phpunit
+test:
+	docker run -it --rm -v .:/opt/project -w /opt/project ordinary-uid-php composer run-script test

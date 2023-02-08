@@ -19,33 +19,25 @@ jobs:
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
 
-      - name: Install PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-      - name: Report PHP and Composer version
-        run: php -v && composer --version
-
-      - name: Cache Composer packages
-        id: composer-cache
+      - name: Cache Composer Dependencies
+        id: cache-composer-deps
         uses: actions/cache@v3
         with:
           path: vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
 
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+      - name: Fetch Dependencies
+        if: steps.cache-composer-deps.outputs.cache-hit != 'true'
+        run: make dependencies
 
       - name: PHP Linting
-        run: composer run-script phplint
+        run: make phplint phplint
 
       - name: PHP CodeSniffer
-        run: composer run-script phpcs
+        run: make phpcs
 
       - name: PHP Psalm
-        run: composer run-script psalm
+        run: make psalm
 
       - name: PHP Unit Tests
-        run: composer run-script phpunit
+        run: make phpunit
