@@ -1,22 +1,25 @@
 .PHONY: *
 
 php-image:
-	docker build --tag ordinary-uid-php .
+	docker build --tag ordinary-php-image .
 
-dependencies:
-	docker run -it --rm -v .:/opt/project -w /opt/project ordinary-uid-php composer install --no-progress
+validate-deps:
+	docker run --rm -v .:/opt/project -w /opt/project ordinary-php-image composer validate --strict
+
+deps:
+	docker run --rm -v .:/opt/project -w /opt/project ordinary-php-image composer install --no-progress
 
 phplint:
-	docker run -it --rm -v .:/opt/project -w /opt/project ordinary-uid-php composer run-script phplint
+	docker run --rm -v .:/opt/project -w /opt/project ordinary-php-image composer run-script phplint
 
 phpcs:
-	docker run -it --rm -v .:/opt/project -w /opt/project ordinary-uid-php composer run-script phpcs
+	docker run --rm -v .:/opt/project -w /opt/project ordinary-php-image composer run-script phpcs
 
 psalm:
-	docker run -it --rm -v .:/opt/project -w /opt/project ordinary-uid-php composer run-script psalm
+	docker run --rm -v .:/opt/project -w /opt/project ordinary-php-image composer run-script psalm
 
 phpunit:
-	docker run -it --rm -v .:/opt/project -w /opt/project ordinary-uid-php composer run-script phpunit
+	docker run --rm -v .:/opt/project -w /opt/project ordinary-php-image composer run-script phpunit
 
 test:
-	docker run -it --rm -v .:/opt/project -w /opt/project ordinary-uid-php composer run-script test
+	docker run --rm -v .:/opt/project -w /opt/project ordinary-php-image composer run-script test

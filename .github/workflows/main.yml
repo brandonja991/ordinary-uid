@@ -16,8 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
+      - name: Build Container
+        run: make php-image
+
+      - name: Validate composer.json
+        run: make validate-deps
 
       - name: Cache Composer Dependencies
         id: cache-composer-deps
@@ -31,7 +34,7 @@ jobs:
         run: make dependencies
 
       - name: PHP Linting
-        run: make phplint phplint
+        run: make phplint
 
       - name: PHP CodeSniffer
         run: make phpcs
