@@ -1,7 +1,7 @@
 {
     "config": {
         "run-mode": "docker",
-        "run-exec": "docker run --rm -v $(pwd):/opt/project -w /opt/project ordinary-uid-php"
+        "run-exec": "docker run --rm -v $(pwd):/opt/project -w /opt/project ordinary-php-image"
     },
     "commit-msg": {
         "enabled": true,
