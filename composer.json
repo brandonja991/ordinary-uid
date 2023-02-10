@@ -1,6 +1,7 @@
 {
   "name": "ordinary/uid",
   "description": "Library for using and generating universally unique ids.",
+  "keywords": ["uid", "uuid", "guid", "unique", "universal", "identifier", "id"],
   "type": "library",
   "license": "MIT",
   "authors": [
