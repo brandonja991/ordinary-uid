@@ -1,4 +1,5 @@
 .phplint-cache
+.phplint.cache
 .phpunit.result.cache
 .phpunit.cache
 .psalm-cache
