@@ -6,17 +6,30 @@ namespace Ordinary\UID;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Ordinary\ValueObject\EqualsFromCompareTo;
+use Ordinary\ValueObject\JsonFromExternalValue;
+use Ordinary\ValueObject\SpaceshipCompareUsingExternalValue;
 
 use const STR_PAD_LEFT;
 
 class UID implements UIDInterface
 {
+    use SpaceshipCompareUsingExternalValue;
+    use EqualsFromCompareTo;
+    use JsonFromExternalValue;
+
     public const PART_REGEX = <<<'REGEXP'
 /^(?<secs>[[:xdigit:]]{8})-(?<prec>[[:xdigit:]])(?<frac>[[:xdigit:]]+)-(?<cbytes>[[:xdigit:]])(?<custom>[[:xdigit:]]+)$/
 REGEXP;
 
-    public static function parse(string $uid): self
+    public static function fromValue(mixed $value): self
     {
+        assert(
+            is_string($value),
+            new UnexpectedValueException('Expecting string as value, got: ' . get_debug_type($value)),
+        );
+
+        $uid = $value;
         assert(
             preg_match(self::PART_REGEX, $uid, $matches),
             new UnexpectedValueException('Invalid UID format: ' . $uid),
@@ -63,7 +76,7 @@ REGEXP;
     public static function isValid(string $uid): bool
     {
         try {
-            self::parse($uid);
+            self::fromValue($uid);
 
             return true;
         } catch (UnexpectedValueException) {
@@ -71,7 +84,7 @@ REGEXP;
         }
     }
 
-    public function value(): string
+    public function externalValue(): string
     {
         return implode('-', [
             str_pad(
@@ -88,6 +101,11 @@ REGEXP;
             ),
             dechex(strlen($this->custom())) . bin2hex($this->custom()),
         ]);
+    }
+
+    public function isNull(): bool
+    {
+        return trim($this->externalValue(), '0-') === '';
     }
 
     public function dateTime(): DateTimeImmutable

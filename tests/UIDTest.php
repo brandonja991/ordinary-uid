@@ -46,9 +46,9 @@ class UIDTest extends TestCase
             self::expectException($exception);
         }
 
-        $object = UID::parse($uid);
+        $object = UID::fromValue($uid);
 
-        self::assertSame($uid, $object->value());
+        self::assertSame($uid, $object->externalValue());
     }
 
     public function testFromDateAndCustom(): void
@@ -60,6 +60,6 @@ class UIDTest extends TestCase
         $format = 'Y-m-d\TH:i:s.v';
 
         self::assertSame($date->format($format), $object->dateTime()->format($format));
-        self::assertSame('425d545b-66f855-621402324255e', $object->value());
+        self::assertSame('425d545b-66f855-621402324255e', $object->externalValue());
     }
 }

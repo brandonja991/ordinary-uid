@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Ordinary\UID;
 
 use DateTimeImmutable;
+use Ordinary\ValueObject\ValueObjectInterface;
 
-interface UIDInterface
+interface UIDInterface extends ValueObjectInterface
 {
     public function dateTime(): DateTimeImmutable;
 
-    public function value(): string;
+    public function externalValue(): string;
 
     public function timeSeconds(): int;
 

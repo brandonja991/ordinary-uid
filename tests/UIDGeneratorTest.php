@@ -73,7 +73,7 @@ class UIDGeneratorTest extends TestCase
         $uid = $generator->generate($customByteLength);
         $dateFormat = 'Y-m-d\TH:i:s.v';
 
-        self::assertSame($expectedUID, $uid->value());
+        self::assertSame($expectedUID, $uid->externalValue());
         self::assertSame($customValue, $uid->custom());
         self::assertSame($expectedDate->format($dateFormat), $uid->dateTime()->format($dateFormat));
     }
@@ -115,7 +115,7 @@ class UIDGeneratorTest extends TestCase
         $uid = $generator->generateCustom($customValue);
         $dateFormat = 'Y-m-d\TH:i:s.v';
 
-        self::assertSame($expectedUID, $uid->value());
+        self::assertSame($expectedUID, $uid->externalValue());
         self::assertSame($customValue, $uid->custom());
         self::assertSame($expectedDate->format($dateFormat), $uid->dateTime()->format($dateFormat));
     }
