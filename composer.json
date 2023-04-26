@@ -15,6 +15,7 @@
     "psr/clock": "^1.0"
   },
   "require-dev": {
+    "ordinary/coding-style": "^1.1",
     "phpunit/phpunit": "^10.1",
     "vimeo/psalm": "^5.9",
     "squizlabs/php_codesniffer": "^3.7",
