@@ -105,7 +105,7 @@ REGEXP;
 
     public function isNull(): bool
     {
-        return trim($this->externalValue(), '0-') === '';
+        return $this->timeSeconds === 0 && $this->timeFraction === 0 && $this->custom === "\0";
     }
 
     public function dateTime(): DateTimeImmutable
