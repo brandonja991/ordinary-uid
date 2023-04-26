@@ -12,7 +12,7 @@ use UnexpectedValueException;
 
 class UIDTest extends TestCase
 {
-    public function uidProvider(): Generator
+    public static function uidProvider(): Generator
     {
         yield ['00000000-3000-100', null]; // seconds lower bound success
         yield ['ffffffff-3000-100', null]; // seconds upper bound success

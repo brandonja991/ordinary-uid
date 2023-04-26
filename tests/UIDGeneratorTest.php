@@ -14,7 +14,7 @@ use Random\Randomizer;
 
 class UIDGeneratorTest extends TestCase
 {
-    public function createNullGeneratorWithFrozenClock(DateTimeInterface $dateTime): Generator
+    public static function createNullGeneratorWithFrozenClock(DateTimeInterface $dateTime): Generator
     {
         $frozenClock = new FrozenClock($dateTime);
 
@@ -28,10 +28,10 @@ class UIDGeneratorTest extends TestCase
         return new Generator($frozenClock, new Randomizer($nullRandomizerEngine));
     }
 
-    public function generatorWithCustomByteCountProvider(): PHPGenerator
+    public static function generatorWithCustomByteCountProvider(): PHPGenerator
     {
         $dateTime = new DateTimeImmutable('2005-04-13T07:35:42.234567');
-        $generator = $this->createNullGeneratorWithFrozenClock($dateTime);
+        $generator = self::createNullGeneratorWithFrozenClock($dateTime);
 
         for ($i = 1; $i < 16; $i++) {
             $nullBytes = str_repeat("\0", $i);
@@ -39,6 +39,24 @@ class UIDGeneratorTest extends TestCase
 
             yield [$generator, $i, $nullBytes, $expected, $dateTime];
         }
+    }
+
+    public static function generatorWithCustomBytesProvider(): PHPGenerator
+    {
+        $dateTime = new DateTimeImmutable('2005-04-13T07:35:42.234567');
+        $generator = self::createNullGeneratorWithFrozenClock($dateTime);
+        $datePrefix = '425ccbce-639447-';
+
+        for ($i = 1; $i < 16; $i++) {
+            yield [
+                $generator,
+                $nullBytes = str_repeat("\0", $i),
+                $datePrefix . dechex($i) . bin2hex($nullBytes),
+                $dateTime,
+            ];
+        }
+
+        yield [$generator, "!@#$", $datePrefix . '421402324', $dateTime];
     }
 
     /**
@@ -64,7 +82,7 @@ class UIDGeneratorTest extends TestCase
     {
         self::expectException(UnexpectedValueException::class);
         $dateTime = new DateTimeImmutable('2005-04-13T07:35:42.234567');
-        $generator = $this->createNullGeneratorWithFrozenClock($dateTime);
+        $generator = self::createNullGeneratorWithFrozenClock($dateTime);
         /** @psalm-suppress InvalidArgument */
         $generator->generate(16);
     }
@@ -73,7 +91,7 @@ class UIDGeneratorTest extends TestCase
     {
         self::expectException(UnexpectedValueException::class);
         $dateTime = new DateTimeImmutable('2005-04-13T07:35:42.234567');
-        $generator = $this->createNullGeneratorWithFrozenClock($dateTime);
+        $generator = self::createNullGeneratorWithFrozenClock($dateTime);
         /** @psalm-suppress InvalidArgument */
         $generator->generate(0);
     }
@@ -82,27 +100,9 @@ class UIDGeneratorTest extends TestCase
     {
         self::expectException(UnexpectedValueException::class);
         $dateTime = new DateTimeImmutable('2005-04-13T07:35:42.234567');
-        $generator = $this->createNullGeneratorWithFrozenClock($dateTime);
+        $generator = self::createNullGeneratorWithFrozenClock($dateTime);
         /** @psalm-suppress InvalidArgument */
         $generator->generate(-1);
-    }
-
-    public function generatorWithCustomBytesProvider(): PHPGenerator
-    {
-        $dateTime = new DateTimeImmutable('2005-04-13T07:35:42.234567');
-        $generator = $this->createNullGeneratorWithFrozenClock($dateTime);
-        $datePrefix = '425ccbce-639447-';
-
-        for ($i = 1; $i < 16; $i++) {
-            yield [
-                $generator,
-                $nullBytes = str_repeat("\0", $i),
-                $datePrefix . dechex($i) . bin2hex($nullBytes),
-                $dateTime,
-            ];
-        }
-
-        yield [$generator, "!@#$", $datePrefix . '421402324', $dateTime];
     }
 
     /** @dataProvider generatorWithCustomBytesProvider */

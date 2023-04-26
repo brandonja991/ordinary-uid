@@ -1,7 +1,10 @@
+<?xml version="1.0"?>
 <phpunit
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         bootstrap="./vendor/autoload.php"
         stopOnFailure="true"
         colors="true"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.1/phpunit.xsd"
 >
     <php>
         <ini name="memory_limit" value="-1"/>
@@ -13,9 +16,11 @@
         </testsuite>
     </testsuites>
 
-    <coverage processUncoveredFiles="true">
-      <include>
-        <directory suffix=".php">src</directory>
-      </include>
-    </coverage>
+    <coverage/>
+
+    <source>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </source>
 </phpunit>
