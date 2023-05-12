@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+
+use Ordinary\Command\CommandExec;
+use Ordinary\UID\Command\OrdinaryUID;
+
+/** @psalm-suppress UnresolvableInclude */
+require_once $_composer_autoload_path ?? (__DIR__ . '/../vendor/autoload.php');
+
+exit((new CommandExec())->execute(
+        (new OrdinaryUID())
+            ->withStreams(STDIN, STDOUT, STDERR)
+            ->withArgs($_SERVER['argv'] ?? $argv),
+));
