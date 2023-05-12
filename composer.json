@@ -14,6 +14,7 @@
     "php": "^8.2",
     "psr/clock": "^1.0",
     "ordinary/clock": "^1.0",
+    "ordinary/command": "^2.3",
     "ordinary/valueobject": "^1.1"
   },
   "require-dev": {
